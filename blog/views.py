@@ -9,7 +9,11 @@ from django.http import HttpResponseRedirect, JsonResponse
 # =====================================
 import json
 import urllib.request
+import os
+from dotenv import load_dotenv
 
+load_dotenv()
+key = os.getenv('key')
 # Create your views here.
 class BlogHomeView(ListView):
     model = Posts
@@ -49,10 +53,9 @@ def weather(request):
     if request.POST.get('action') == 'post':
         # city = request.POST.get['city']
         result = {}
-        print(request.POST)
         try:
             city = request.POST.get('city')
-            source = urllib.request.urlopen('https://api.openweathermap.org/data/2.5/weather?q='+ city + f'&units=metric&appid=0e1791a71ccff9f26ec1de019ec1b1e8').read()
+            source = urllib.request.urlopen('https://api.openweathermap.org/data/2.5/weather?q='+ city + f'&units=metric&appid={key}').read()
 
             list_of_data = json.loads(source)
 
@@ -67,7 +70,6 @@ def weather(request):
             data = {}
     else:
         data = {}
-    print(data)
     return JsonResponse({'result':data})
 
     
