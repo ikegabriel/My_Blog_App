@@ -1,0 +1,148 @@
+{% extends 'base.html' %}
+{% load static %}
+
+    <title>{%block title %}{{object.title_tag}}{%endblock%}</title>
+{% block posts %}
+<a href="{% url 'home' %}">Go Back</a><br>
+
+    <div class="card">
+        <h1>{{object.title}}{{object.id}}</h1>
+        <p><strong>Posted: </strong><small>{{object.date}}</small></p>
+        <hr>
+        {% if object.header_image %}
+        <img class="card-img-top" src="{{object.header_image.url}}" alt="" width="100%">
+        {%endif%}
+        <p>{{object.article|safe}}</p> <!--safe is used to escape Html and allow formatting of text-->
+        <hr>
+        <a href="{% url 'category' object.category %}">{{object.category}}</a><br>
+        <hr>
+        {% if user.is_authenticated %}
+            {% if user.id == object.author.id %} <!-- This makes use of the user model to authenticate who can edit or delete posts 
+                                                      by comparing the author user id with the currently logged in user-->
+            <a href="{% url 'update' object.pk %}">Update Post</a>
+            <a href="{% url 'delete' object.pk %}">Delete Post</a>
+            {% endif %}
+        {% endif %}
+
+        
+        
+        <hr>
+        
+
+        <br>
+        <form method ="POST">
+            {% csrf_token %}
+        {% if user.is_authenticated %}
+            {%if liked %}
+            <button style="background: none; border: none; " type="submit" id="like_button" name="post_id" value="{{object.id}}">
+                <svg xmlns="http://www.w3.org/2000/svg" style="max-width: 26px; max-height: 26px;" fill="red" class="bi bi-heart" viewBox="0 0 16 16">
+                    <path d="m8 2.748-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01L8 2.748zM8 15C-7.333 4.868 3.279-3.04 7.824 1.143c.06.055.119.112.176.171a3.12 3.12 0 0 1 .176-.17C12.72-3.042 23.333 4.867 8 15z"/>
+                  </svg>
+            </button> : <span id="like_count">{{total_likes}}</span>
+            {%else%}
+                <button style="background: none; border: none; " type="submit" id="like_button" name="post_id" value="{{object.id}}">
+                    <svg xmlns="http://www.w3.org/2000/svg" style="max-width: 26px; max-height: 26px;" fill="teal" class="bi bi-heart" viewBox="0 0 16 16">
+                        <path d="m8 2.748-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01L8 2.748zM8 15C-7.333 4.868 3.279-3.04 7.824 1.143c.06.055.119.112.176.171a3.12 3.12 0 0 1 .176-.17C12.72-3.042 23.333 4.867 8 15z"/>
+                      </svg>
+                </button> : <span id="like_count">{{total_likes}}</span>
+            {%endif%}<br>
+        {%else%}
+        <a href="{%url 'login'%}">
+            <svg xmlns="http://www.w3.org/2000/svg" style="max-width: 26px; max-height: 26px;"  fill="currentColor" class="bi bi-heart" viewBox="0 0 16 16">
+                <path d="m8 2.748-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01L8 2.748zM8 15C-7.333 4.868 3.279-3.04 7.824 1.143c.06.055.119.112.176.171a3.12 3.12 0 0 1 .176-.17C12.72-3.042 23.333 4.867 8 15z"/>
+              </svg>
+        </a>
+        {% endif %}    
+        </form>
+        <!-- <form method="POST">
+            {%csrf_token%}
+            <button type="submit" id="add_favourite" value='{{object.id}}'> Add</button>
+        </form> -->
+        
+    </div>
+    <hr><br>
+    <div class="main_one">
+        <h3>Author</h3>
+        <div class="main_one" style="width: fit-content;">
+            {%if object.author.profile.profile_picture.url%}
+            <img src="{{object.author.profile.profile_picture.url}}" alt="Author Pic" width="150px" style="border-radius: 20px;">
+            {%else%}
+            <img src="{%static 'blog/images/3_coffee_holders.jpg'%}" alt="Substitute Pic" width="150px" style="border-radius: 20px;">
+            {%endif%}
+        </div>
+    
+    <p><strong>{{object.author.last_name}} {{object.author.first_name}}</strong></p>
+    <p>{{object.author.profile.bio}}</p>
+    
+    <!-- Remember to add if statements in case a user doesn't have a social -->
+    {%if object.author.profile.facebook%}
+    <a href="{{object.author.profile.facebook}}">Facebook</a>
+    {%endif%}
+    {%if object.author.profile.twitter%}
+    <a href="{{object.author.profile.twitter}}">Twitter</a>
+    {%endif%}
+    {%if object.author.profile.instagram%}
+    <a href="{{object.author.profile.instagram}}">Instagram</a>
+    {%endif%}
+    {%if object.author.profile.website%}
+    <a href="{{object.author.profile.website}}">Website</a>
+    {%endif%}
+    
+    </div>
+        
+    
+{% endblock %}
+
+
+{%block side%}
+<br><br>
+<div class="card side">
+    <h3>Popular</h3>
+    {%for fav in favs%}
+    <p>{{fav.title}}</p>
+    {%endfor%}
+</div><br>
+
+<script>
+    $(document).on('click', '#like_button', function (e){
+        e.preventDefault();
+        $.ajax({
+            type:'POST',
+            url: '{%url "post_likes" object.id %}',
+            data:{
+                postid: $('#like_button').val(),
+                csrfmiddlewaretoken:$('input[name=csrfmiddlewaretoken]').val(),
+                action: 'post'
+            },
+            success: function (json){
+                document.getElementById('like_count').innerHTML = json['result']
+                console.log(json)
+            },
+            error: function (xhr, errmsg, err){
+
+            }
+        });
+    })
+
+    $(document).on('click', '#add_favourite', function (f){
+        f.preventDefault();
+        $.ajax({
+            type:'POST',
+            url: '{%url "favourite" object.id %}',
+            data:{
+                postid: $('#add_favourite').val(),
+                csrfmiddlewaretoken:$('input[name=csrfmiddlewaretoken]').val(),
+                action: 'post'
+            },
+            success: function (json){
+                document.getElementById('favourites').innerHTML = json['fav']
+                console.log(json)
+            },
+            error: function (xhr, errmsg, err){
+
+            }
+        });
+    })
+</script> 
+
+{%endblock%}

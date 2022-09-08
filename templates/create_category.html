@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+<title>{% block title %}Create a new Blog Category{% endblock%}</title>
+
+{% block posts %}
+{% if user.is_authenticated %}
+    <h1>Add Category</h1>
+    <div class="card">
+        <form method="POST">
+            
+            {% csrf_token %}
+
+            {{ form.as_p }}
+
+            <input class="btn btn-outline-success" type="submit" value="Create">
+        
+        </form>
+    </div>
+{% else %}
+YOU'RE NOT MEANT TO BE HERE, BE GONE!!!
+{% endif %}
+{% endblock %}
+
+{%block side%}
+<div class="card side">
+    <h3>Trending</h3>
+</div><br>
+<div class="card side">
+    
+</div><br>
+<div class="card side">
+    <h3>Send Us A Message</h3>
+</div>
+                       
+{%endblock%}

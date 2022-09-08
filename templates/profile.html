@@ -1,0 +1,42 @@
+{%extends 'base.html'%}
+<title>{% block title %}Profile{% endblock%}</title>
+
+{%block posts%}
+{% if user.is_authenticated %}
+<br><br>
+
+<h1>Profile Details</h1>
+<br>
+{%if user.profile.profile_picture%}
+    <img src="{{user.profile.profile_picture.url}}" alt="Profile Picture" width="100%">
+{%endif%}
+<div class='card'>
+    <h3>Bio</h3>
+    <p>{{user.profile.bio}}</p>
+    <br>
+    <h3>Socials</h3>
+    <a href="{{user.profile.facebook}}">Facebook</a><br>
+    <a href="{{user.profile.twitter}}">Twitter</a><br>
+    <a href="{{user.profile.instagram}}">Instagram</a><br>
+    <a href="{{user.profile.website}}">Website</a><br>
+    <br><p><a class="btn btn-outline-success" href="">Edit Profile</a></p>
+</div>
+
+
+{%else%}
+<h1>YOU CAN'T BE HERE!!! BE GONE</h1>
+{%endif%}
+{%endblock%}
+{%block side%}
+<br><br>
+<div class="card side">
+    <h3>Account Details</h3>
+    <p><strong>Name: </strong>{{user.first_name}} {{user.last_name}}</p>
+    <p><strong>Username: </strong>{{user.username}}</p>
+    <p><strong>Email: </strong>{{user.email}}</p>
+    <p><strong>Date Joined: </strong>{{user.date_joined}}</p>
+    <p><strong>Your Permissions: </strong>{{user.permissions}}</p>
+    <p><a class="btn btn-outline-success" href="{%url 'update_profile'%}">Edit Account Details</a></p>
+    
+</div><br>
+{%endblock%}

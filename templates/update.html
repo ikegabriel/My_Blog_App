@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% block posts %}
+<br><br>
+{% if user.is_authenticated %}
+    {% if user.id == object.author.id %} <!-- This makes use of the user model to authenticate who can edit or delete posts 
+                                                by comparing the author user id with the currently logged in user-->
+    <h1>Update Article</h1>
+    <div class="card">
+
+    
+    <form method="POST">
+        {% csrf_token %}
+
+        {{ form.as_p }}
+        {{ form.media }}
+
+        <input class="btn btn-outline-success" type="submit" value="Update">
+    </form>
+    {% else %}
+    YOU'RE NOT AUTHORIZED TO EDIT THIS POST!!!
+    {% endif %}
+{% else %}
+YOU'RE NOT MEANT TO BE HERE, BE GONE!!!
+{% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+<title>{% block title %}Update Profile{% endblock%}</title>
+
+{% block posts %}
+<br><br>
+    <h1>Update Profile</h1>
+    <div class="card">
+    <form method="POST" encytpe="multipart/form-data">
+        
+        {% csrf_token %}
+
+        {{ form.as_p }}
+        <!-- <textarea name="bio" id="" cols="30" rows="10"></textarea>
+        <input type="file" name="profile_picture">
+        <input type="text" name="twitter">
+        <input type="text" name="facebook">
+        <input type="text" name="instagram">
+        <input type="text" name="website"> -->
+
+
+        <input class="btn btn-outline-success" type="submit" value="Update">
+    </form>
+</div>
+{% endblock %}

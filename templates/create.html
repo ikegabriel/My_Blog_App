@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+<title>{% block title %}Create your Post{% endblock%}</title>
+
+{% block posts %}
+{% if user.is_authenticated %}
+<br><br>
+    <h1>Create Post</h1>
+    <div class="card">
+        <form class="form" method="POST" enctype="multipart/form-data">
+        
+        {% csrf_token %}
+        
+        {{ form.as_p }}
+        {{ form.media }}
+        
+
+        <input class="btn btn-outline-success" type="submit" value="Post">
+    </form>
+    </div>
+    <script>
+        let name = "{{ user.id }}";
+        document.getElementById("author").value = name;
+    </script>
+    
+{% else %}
+YOU'RE NOT MEANT TO BE HERE, BE GONE!!!
+{% endif %}
+{% endblock %}

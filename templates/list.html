@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Posts</title>
+    <style>
+        #title{
+            padding: 20px;
+            background-color: wheat;
+            border-radius: 10px;
+            
+            list-style-type: none;
+        }
+        #article{
+            padding: 5px;
+            background-color: wheat;
+            border-radius: 10px;
+            list-style-type: none;
+        }
+    </style>
+</head>
+<body>
+    <h1>Posts</h1>
+    <a href="{% url 'home' %}">Home</a>
+
+
+<ul>
+    {% for object in object_list %}
+
+    <li id="title"><h2>{{object.title}}</h2></li>
+    <li id="date"><strong>Date Published :</strong> <small>{{object.date}}</small></li>
+    <li id="date"><strong>Date Updated :</strong> <small>{{object.update_date}}</small></li>
+    <li id="author"><strong>Author :</strong> {{object.author}}</li>
+    <li id="article">{{object.article}}</li>
+    <a href="{% url 'update' object.pk%}">Update</a>
+    
+
+    
+
+
+    <hr>
+
+    {% empty %}
+    <li>No object yet</li>
+    {% endfor %}
+</ul>
+</body>
+</html>

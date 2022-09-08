@@ -1,0 +1,85 @@
+{% extends 'base.html' %}
+{% load static %}
+
+<title>{% block title %}The Py Times{% endblock %}</title>
+
+<a href="{% url 'list' %}">List</a>
+
+
+{%block intro%}
+<br>
+<img src="{%static 'blog/images/3_coffee_holders.jpg'%}" alt="" width="100%">
+<br>
+<br>
+    <!-- <h1 class="intro_text">Take A Sip Of Coffe And Enjoy The Py Times</h1> -->
+
+    {%endblock%}
+
+
+{% block posts %}
+
+        {% for object in object_list %}
+        
+            
+    <div class="card">
+        <p>
+            {% if object.header_image %}
+        <img class="card-img-top" src="{{object.header_image.url}}" alt="" width="100%">
+            {%endif%}
+        </p>
+        <h1 id="center_text">
+            {{object.title}}
+        </h1>
+        <p>
+            {{object.article_snippet|safe|truncatewords:50}}.......
+            <a href="{% url 'detail' object.pk %}">Continue Reading</a> <!--We can also use eg slice:":500"-->
+        </p>
+        <p>
+            {{object.date|date:"d-M-y" }}
+        </p>
+    </div><br>
+        {% endfor %}
+{% endblock %}
+{%block side%}
+
+<div class="card side">
+    <h3>Weather</h3>
+            <form class="d-flex" method="POST">
+                {% csrf_token %}
+                <input class="form-control me-2" type="text" id="city" name="city" placeholder="Enter your City/Country" required>
+                <button class="btn btn-outline-success" type="submit" id="search">Search</button>
+            </form>
+            <p><strong>Country</strong>: <span id="country">n</span></p>
+            <p><strong>Temperature</strong>: <span id="temperature">0 <sup>o</sup>c</span></p>
+            <p><strong>Forecast</strong>:  <span id="forecast">n</span></p>
+            <p><img id="icon" src="https://openweathermap.org/img/w/.png" alt="" style="width: 150px; margin: auto;"></p>
+</div><br>
+
+<script>
+    $(document).on('click', '#search', function (e){
+        e.preventDefault();
+        $.ajax({
+            type:'POST',
+            url: '{%url "weather"%}',
+            data:{
+                city: $('#city').val(),
+                csrfmiddlewaretoken:$('input[name=csrfmiddlewaretoken]').val(),
+                action: 'post'
+            },
+
+            success: function (json){
+                document.getElementById('country').innerHTML = json['result']['country_code']
+                document.getElementById('temperature').innerHTML = json['result']['temp']
+                document.getElementById('forecast').innerHTML = json['result']['main']
+                let icon = json['result']['icon']
+                document.getElementById('icon').src = 'https://openweathermap.org/img/w/'+ icon +'.png'
+                console.log(json)
+            },
+            error: function (xhr, errmsg, err){
+
+            }
+        });
+    })
+
+</script>
+{%endblock%}

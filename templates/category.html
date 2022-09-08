@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% if category %}
+    <title>{% block title %}{{cats}}{% endblock%}</title>
+    {% block posts %}
+    <br><br>
+    <h1>{{cats}}</h1>
+    {% for post in category %}
+    <div class="main_one">
+        {% if post.header_image %}
+        <img src="{{post.header_image.url}}" alt="" width="100%">
+        {%endif%}
+        <h2>
+        {{post.title}}
+    </h2>
+    <p>
+        <strong>Author :</strong> {{post.author}}
+    </p>
+    <p>
+        <strong>Category :</strong> {{post.category}}
+    </p>
+    <p>
+        {{post.article|safe|truncatewords:30}} <!--We can also use eg slice:":500"-->
+    </p>
+    <p><a href="{% url 'detail' post.pk %}">Continue Reading</a></p>
+    </div>
+    
+
+    {% endfor %}
+    {% endblock %}
+{% else %}
+<h1>{{cats}}</h1>
+    <h2>!!Sorry Nothing In This Category Yet</h2>
+    
+{% endif %}
+

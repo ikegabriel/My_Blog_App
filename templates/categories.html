@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+    {% block posts %}
+    <br><br>
+    <div class="card">
+        {% for category in category %}
+        <p><a href="{% url 'category' category.name %}">{{category}}</a></p>
+        {% endfor %}
+    </div>
+    
+    {% endblock %}
